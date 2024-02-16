@@ -10,6 +10,8 @@
 #include "Hitbox.h"
 #include "ObjectType.h"
 
+//This should exist in test branch
+
 GameEngine::GameEngine()
 {
 	gameRunning = true;
