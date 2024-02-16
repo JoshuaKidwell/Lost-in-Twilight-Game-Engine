@@ -14,29 +14,31 @@ Sprite::Sprite()
 	a = 0;
 }
 
-Sprite::Sprite(std::string spriteName, int xpos, int ypos, const char* imgfile, bool show, std::pair<double, double> velo)
+Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show)
 {
 	name = spriteName;
 	x = xpos;
 	y = ypos;
 	img = imgfile;
 	visible = show;
-	v.first = velo.first;
-	v.second = velo.second;
+	v.first = 0;
+	v.second = 0;
 	a = 0;
+	s = 1;
 	type = DEFAULT;
 }
 
-Sprite::Sprite(std::string spriteName, int xpos, int ypos, const char* imgfile, bool show, std::pair<double, double> velo, objectType stype)
+Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show, objectType stype)
 {
 	name = spriteName;
 	x = xpos;
 	y = ypos;
 	img = imgfile;
 	visible = show;
-	v.first = velo.first;
-	v.second = velo.second;
+	v.first = 0;
+	v.second = 0;
 	a = 0;
+	s = 1;
 	type = stype;
 }
 
@@ -45,9 +47,9 @@ void Sprite::Update()
 	move();
 }
 
-void Sprite::setPos(int xpos, int ypos) { x = xpos; y = ypos; }
+void Sprite::setPos(double xpos, double ypos) { x = xpos; y = ypos; }
 
-void Sprite::chanPos(int xpos, int ypos) { setPos(x + xpos, y + ypos); }
+void Sprite::chanPos(double xpos, double ypos) { setPos(x + xpos, y + ypos); }
 
 void Sprite::move()
 {

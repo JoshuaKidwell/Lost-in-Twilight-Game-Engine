@@ -11,7 +11,7 @@
 
 class GameEngine {
 public:
-	GameEngine();
+	GameEngine(int* fps);
 	void Update();
 	void Run();
 	bool IsRunning();
@@ -29,7 +29,9 @@ public:
 	~GameEngine();
 private:
 	bool gameRunning;
-	int Order;
+	int ORDER;
+	int* FPS;
+	double DELTA;
 	InputEventHandler keyInput;
 	WindowRenderer window;
 	std::map<std::string, Sprite*> spriteMap;

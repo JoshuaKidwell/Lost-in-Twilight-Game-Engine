@@ -10,20 +10,21 @@ class Sprite
 {
 public:
 	Sprite();
-	Sprite(std::string spriteName, int x, int y, const char* imgfile, bool show, std::pair<double, double> velo);
-	Sprite(std::string spriteName, int x, int y, const char* imgfile, bool show, std::pair<double, double> velo, objectType stype);
+	Sprite(std::string spriteName, double x, double y, const char* imgfile, bool show);
+	Sprite(std::string spriteName, double x, double y, const char* imgfile, bool show, objectType stype);
 	void Update();
-	void setPos(int x, int y);
-	void chanPos(int x, int y);
+	void setPos(double x, double y);
+	void chanPos(double x, double y);
 	void move();
 	void setAnimator(int fullW, int fullH, std::vector<std::pair<int, int>> sheetSizes, std::vector<int> sheetCounts);
 	std::pair<std::pair<int, int>, std::pair<int, int>> curAni();
 	std::pair<std::pair<int, int>, std::pair<int, int>> getSheet(int order, int count);
 	void loopAniWhen(int order, bool);
+
 	std::string name;
 	objectType type;
-	int x;
-	int y;
+	double x;
+	double y;
 	double a;
 	double s;
 	std::pair<double, double> v;

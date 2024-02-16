@@ -8,6 +8,7 @@ class InputEventHandler
 {
 public:
 	InputEventHandler();
+	void setFps(int* fps);
 	void updateInputs();
 
 	//Accessable Key information true=presssed/false=unpressed
@@ -25,7 +26,7 @@ public:
 	int frameCount;
 	double secCount;
 	bool wait(double sec, int specialKey);
-	int FPS;
+	int* FPS;
 private:
 	void updateClicks(bool, bool&, bool&);
 	bool umlc;
