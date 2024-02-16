@@ -10,16 +10,18 @@
 #include "Hitbox.h"
 #include "ObjectType.h"
 
-//Test
-
-GameEngine::GameEngine()
+GameEngine::GameEngine(int* fps)
 {
 	gameRunning = true;
-	Order = 0;
+	ORDER = 0;
+	FPS = fps;
+	keyInput.setFps(fps);
+	DELTA = 60 / (double)(*FPS);
 }
 
 void GameEngine::Update()
 {
+	DELTA = 60 / (double)(*FPS);
 	keyInput.updateInputs();
 	RunInputs();
 	Run();
@@ -30,19 +32,20 @@ void GameEngine::Update()
 
 void GameEngine::Run()
 {
-	switch (Order) {
+	switch (ORDER) {
 	case 0:
 		window.SetBackgroundColor(255, 255, 255, 255);
-		spriteMap["animation"] = new Sprite("animation", 1280 / 2, 720 / 2, "res/aniTest.png", true, { 0,0 });
-		spriteMap["animation"]->s = 20;
-		spriteMap["animation"]->setAnimator(11, 17, { {2,3}, {4,4} }, { 6, 3 });
-		LoadSprite(spriteMap["animation"]);
-		Order++;
+		spriteMap["Player"] = new Sprite("Player", 1280 / 2, 720 / 2, "res/B_Player.png", true);
+		spriteMap["Player"]->s = 5;
+		spriteMap["Player"]->setAnimator(50, 50, { {5,5} }, { 8 });
+		std::cout << spriteMap["Player"]->img;
+		LoadSprite(spriteMap["Player"]);
+		ORDER++;
 		break;
 	case 1:
 		window.SetBackgroundColor(255, 255, 255, 255);
-		ControlSprite(spriteMap["animation"], 10);
-		spriteMap["animation"]->loopAniWhen(0, keyInput.wait(0.1, 0));
+		ControlSprite(spriteMap["Player"], 5);
+		spriteMap["Player"]->loopAniWhen(0, keyInput.wait(0.1, 0));
 		break;
 	}
 }
@@ -75,6 +78,7 @@ void GameEngine::UpdateHitboxes()
 
 void GameEngine::LoadSprite(Sprite* sprite)
 {
+	std::cout << sprite->img;
 	window.LoadTextureFromFile(sprite->img, sprite->s);
 }
 
@@ -104,6 +108,7 @@ void GameEngine::RunInputs()
 
 void GameEngine::ControlSprite(Sprite* sprite, double speed)
 {
+	speed = speed * DELTA;
 	int vect[2] = { 0,0 };
 	if (keyInput.w) {
 		vect[1] -= 1;

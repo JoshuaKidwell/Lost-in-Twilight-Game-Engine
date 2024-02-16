@@ -9,7 +9,12 @@ InputEventHandler::InputEventHandler()
 	umlc = umrc = false;
 	frameCount = 0;
 	secCount = secCount = 0;
-	FPS = 60;
+	FPS = nullptr;
+}
+
+void InputEventHandler::setFps(int* fps)
+{
+	FPS = fps;
 }
 
 void InputEventHandler::updateInputs()
@@ -81,11 +86,11 @@ void InputEventHandler::updateInputs()
 	updateClicks(mr, mrc, umrc);
 	SDL_GetMouseState(&mx, &my);
 	frameCount++;
-	secCount = (double)frameCount / FPS;
+	secCount = (double)frameCount / *FPS;
 
 	//updates waitMap, ereases elements that finished counting
 	for (auto it = waitMap.begin(); it != waitMap.end(); it++) {
-		if (it->second >= it->first.first * FPS) {
+		if (it->second >= it->first.first * *FPS) {
 			waitMap.erase(it->first);
 			break;
 		}
@@ -113,7 +118,7 @@ bool InputEventHandler::wait(double sec, int specialKey)
 		waitMap[{ sec, specialKey}] = 0;
 	}
 	// check if seconds passed
-	if (waitMap[{ sec, specialKey}] >= sec * FPS) {
+	if (waitMap[{ sec, specialKey}] >= sec * *FPS) {
 		return true;
 	}
 	return false;
