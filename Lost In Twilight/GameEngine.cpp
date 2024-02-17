@@ -21,8 +21,8 @@ GameEngine::GameEngine(int* fps)
 
 void GameEngine::Update()
 {
-	DELTA = 60 / (double)(*FPS);
 	keyInput.updateInputs();
+	DELTA = 60 / (double)(*FPS);
 	RunInputs();
 	Run();
 	UpdateSprites();
@@ -38,7 +38,7 @@ void GameEngine::Run()
 		spriteMap["Player"] = new Sprite("Player", 1280 / 2, 720 / 2, "res/B_Player.png", true);
 		spriteMap["Player"]->s = 5;
 		spriteMap["Player"]->setAnimator(50, 50, { {5,5} }, { 8 });
-		spriteMap["1"] = new Bullet("1", 100, 100, "res/1.png", true, {0, 0}, DEFAULT);
+		spriteMap["1"] = new Bullet("1", 0, 0, "res/1.png", false, {0, 0}, DEFAULT);
 		spriteMap["1"]->setAnimator(1, 1, { {1,1} }, { 1 });
 		spriteMap["1"]->s = 5;
 		hitboxMap["1"] = new Hitbox(5, 5, spriteMap["1"], 0, 0);

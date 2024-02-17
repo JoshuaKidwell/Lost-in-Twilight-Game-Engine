@@ -21,6 +21,7 @@ int main(int argc, char* args[])
 		////////////////////////////////////////
 
 		LostInTwilight.Update();
+		std::cout << "(" << fps << ")";
 
 		////////////////////////////////////////
 		if (SDL_GetTicks() - startTick < frameDelay) {
