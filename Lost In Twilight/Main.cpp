@@ -2,7 +2,7 @@
 #include "GameEngine.h"
 #include <iostream>
 
-const int DESIRED_FPS = 10;
+const int DESIRED_FPS = 60;
 
 int main(int argc, char* args[])
 {

@@ -42,6 +42,21 @@ Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* img
 	type = stype;
 }
 
+Sprite::Sprite(std::string spriteName, Sprite& sprite)
+{
+	name = spriteName;
+	x = sprite.x;
+	y = sprite.y;
+	img = sprite.img;
+	visible = sprite.s;
+	v.first = 0;
+	v.second = 0;
+	a = sprite.a;
+	s = sprite.s;
+	type = sprite.type;
+	animator = sprite.animator;
+}
+
 void Sprite::Update()
 {
 	move();

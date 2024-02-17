@@ -12,6 +12,17 @@ Animator::Animator()
 	looping_count = 0;
 }
 
+Animator::Animator(const Animator& ani)
+{
+	looping_count = ani.looping_count;
+	full_h = ani.full_h;
+	full_w = ani.full_w;
+	sheet_sizes = ani.sheet_sizes;
+	sheet_counts = ani.sheet_counts;
+	sheet_pos = ani.sheet_pos;
+	current = ani.current;
+}
+
 void Animator::setAnimator(int fullW, int fullH, std::vector<std::pair<int, int>> sheetSizes, std::vector<int> sheetCounts)
 {
 	full_w = fullW;
@@ -72,4 +83,16 @@ void Animator::loop(int order)
 std::pair<std::pair<int, int>, std::pair<int, int>> Animator::getSheet(int order, int count)
 {
 	return { sheet_pos[order][count], sheet_sizes[order] };
+}
+
+Animator& Animator::operator=(Animator& ani)
+{
+	looping_count = ani.looping_count;
+	full_h = ani.full_h;
+	full_w = ani.full_w;
+	sheet_sizes = ani.sheet_sizes;
+	sheet_counts = ani.sheet_counts;
+	sheet_pos = ani.sheet_pos;
+	current = ani.current;
+	return *this;
 }

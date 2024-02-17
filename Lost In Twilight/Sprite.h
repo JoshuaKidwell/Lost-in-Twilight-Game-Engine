@@ -10,8 +10,9 @@ class Sprite
 {
 public:
 	Sprite();
-	Sprite(std::string spriteName, double x, double y, const char* imgfile, bool show);
-	Sprite(std::string spriteName, double x, double y, const char* imgfile, bool show, objectType stype);
+	Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show);
+	Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show, objectType stype);
+	Sprite(std::string spriteName, Sprite&);
 	void Update();
 	void setPos(double x, double y);
 	void chanPos(double x, double y);

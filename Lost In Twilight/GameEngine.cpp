@@ -38,13 +38,13 @@ void GameEngine::Run()
 		spriteMap["Player"] = new Sprite("Player", 1280 / 2, 720 / 2, "res/B_Player.png", true);
 		spriteMap["Player"]->s = 5;
 		spriteMap["Player"]->setAnimator(50, 50, { {5,5} }, { 8 });
-		std::cout << spriteMap["Player"]->img;
-		LoadSprite(spriteMap["Player"]);
+		Load(spriteMap["Player"]);
 		ORDER++;
 		break;
 	case 1:
 		window.SetBackgroundColor(255, 255, 255, 255);
-		ControlSprite(spriteMap["Player"], 5);
+		Control(spriteMap["Player"], 5);
+		Clone(spriteMap["Player"]);
 		spriteMap["Player"]->loopAniWhen(0, keyInput.wait(0.1, 0));
 		break;
 	}
@@ -61,10 +61,10 @@ void GameEngine::UpdateSprites()
 		it->second->Update();
 		if (it->second->visible) {
 			if (!window.FindLoaded(it->second->img)) {
-				LoadSprite(it->second);
+				Load(it->second);
 				std::cout << "Loaded " << it->second->img << std::endl;
 			}
-			DrawSprite(it->second);
+			Draw(it->second);
 		}
 	}
 }
@@ -76,24 +76,23 @@ void GameEngine::UpdateHitboxes()
 	}
 }
 
-void GameEngine::LoadSprite(Sprite* sprite)
+void GameEngine::Load(Sprite* sprite)
 {
-	std::cout << sprite->img;
 	window.LoadTextureFromFile(sprite->img, sprite->s);
 }
 
-void GameEngine::UnloadSprite(Sprite* sprite)
+void GameEngine::Unload(Sprite* sprite)
 {
 	window.UnloadTexture(sprite->img);
 }
 
-void GameEngine::DrawSprite(Sprite* sprite)
+void GameEngine::Draw(Sprite* sprite)
 {
 	std::pair<std::pair<int, int>, std::pair<int, int>> sheet = sprite->curAni();
 	window.DrawTexture(sprite->img, sprite->x, sprite->y, sheet.first.first, sheet.first.second, sheet.second.first, sheet.second.second, sprite->a, sprite->s, SDL_FLIP_NONE);
 }
 
-void GameEngine::DrawSprite(Sprite* sprite, int order, int count)
+void GameEngine::Draw(Sprite* sprite, int order, int count)
 {
 	std::pair<std::pair<int, int>, std::pair<int, int>> sheet = sprite->getSheet(order, count);
 	window.DrawTexture(sprite->img, sprite->x, sprite->y, sheet.first.first, sheet.first.second, sheet.second.first, sheet.second.second, sprite->a, sprite->s, SDL_FLIP_NONE);
@@ -106,7 +105,7 @@ void GameEngine::RunInputs()
 	}
 }
 
-void GameEngine::ControlSprite(Sprite* sprite, double speed)
+void GameEngine::Control(Sprite* sprite, double speed)
 {
 	speed = speed * DELTA;
 	int vect[2] = { 0,0 };
@@ -127,6 +126,12 @@ void GameEngine::ControlSprite(Sprite* sprite, double speed)
 		std::pair<double, double> v = UnitVect(speed, vect[0], vect[1]);
 		sprite->chanPos(v.first, v.second);
 	}
+}
+
+void GameEngine::Clone(Sprite* sprite)
+{
+	std::string name = sprite->name + std::to_string(spriteMap.size());
+	spriteMap[name] = new Sprite(name, *sprite);
 }
 
 void GameEngine::ShootFromWith(Sprite* sprite, Bullet* bullet, double xpos, double ypos, double speed)

@@ -17,12 +17,13 @@ public:
 	bool IsRunning();
 	void UpdateSprites();
 	void UpdateHitboxes();
-	void LoadSprite(Sprite*);
-	void UnloadSprite(Sprite*);
-	void DrawSprite(Sprite*);
-	void DrawSprite(Sprite*, int order, int count);
+	void Load(Sprite*);
+	void Unload(Sprite*);
+	void Draw(Sprite*);
+	void Draw(Sprite*, int order, int count);
 	void RunInputs();
-	void ControlSprite(Sprite* sprite, double speed);
+	void Control(Sprite* sprite, double speed);
+	void Clone(Sprite*);
 	void ShootFromWith(Sprite* sprite, Bullet* bullet, double, double, double speed);
 	bool Collision(objectType, objectType);
 	std::pair<double, double> UnitVect(double speed, double x, double y);
