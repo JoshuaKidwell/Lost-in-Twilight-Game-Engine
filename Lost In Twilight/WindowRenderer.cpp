@@ -1,6 +1,7 @@
 #include "WindowRenderer.h"
 #include <SDL.h>
 #include <SDL_image.h>
+#include <iostream>
 
 int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 720;

@@ -24,6 +24,7 @@ public:
 	void RunInputs();
 	void Control(Sprite* sprite, double speed);
 	void Clone(Sprite*);
+	void Clone(Sprite*, int xpos, int ypos, bool show);
 	void ShootFromWith(Sprite* sprite, Bullet* bullet, double, double, double speed);
 	bool Collision(objectType, objectType);
 	std::pair<double, double> UnitVect(double speed, double x, double y);

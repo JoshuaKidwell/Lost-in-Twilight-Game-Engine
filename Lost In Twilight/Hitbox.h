@@ -8,6 +8,7 @@ class Hitbox
 {
 public:
 	Hitbox();
+	Hitbox(Hitbox&, Sprite*);
 	Hitbox(int width, int height, Sprite* hitSprite, int changeX, int changeY);
 	void setHitbox(int width, int height, Sprite* hitSprite, int changeX, int changeY);
 	void LinkTo(Sprite* hitSprite, int changeX, int changeY);
@@ -18,11 +19,10 @@ public:
 	int h;
 	int x;
 	int y;
-	objectType type;
-private:
-	Sprite* sprite;
 	int chanX;
 	int chanY;
+	objectType type;
+	Sprite* sprite;
 };
 
 #endif

@@ -57,19 +57,19 @@ Sprite::Sprite(std::string spriteName, Sprite& sprite)
 	animator = sprite.animator;
 }
 
-void Sprite::Update()
+void Sprite::Update(double delta)
 {
-	move();
+	move(delta);
 }
 
 void Sprite::setPos(double xpos, double ypos) { x = xpos; y = ypos; }
 
 void Sprite::chanPos(double xpos, double ypos) { setPos(x + xpos, y + ypos); }
 
-void Sprite::move()
+void Sprite::move(double delta)
 {
-	x += v.first;
-	y += v.second;
+	x += v.first * delta;
+	y += v.second * delta;
 }
 
 void Sprite::setAnimator(int fullW, int fullH, std::vector<std::pair<int, int>> sheetSizes, std::vector<int> sheetCounts)
@@ -87,7 +87,7 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Sprite::getSheet(int order, 
 	return animator.getSheet(order, count);
 }
 
-void Sprite::loopAniWhen(int order, bool t)
+void Sprite::loopAnimationWhen(int order, bool t)
 {
 	if (t)
 		animator.loop(order);

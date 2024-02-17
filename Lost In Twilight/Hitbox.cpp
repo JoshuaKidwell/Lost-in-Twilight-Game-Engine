@@ -10,6 +10,16 @@ Hitbox::Hitbox()
 	chanY = 0;
 }
 
+Hitbox::Hitbox(Hitbox& hit, Sprite* hitSprite)
+{
+	w = hit.w;
+	h = hit.h;
+	chanX = hit.chanX;
+	chanY = hit.chanY;
+	sprite = hitSprite;
+	type = hit.type;
+}
+
 Hitbox::Hitbox(int width, int height, Sprite* hitSprite, int changeX, int changeY)
 {
 	w = width;

@@ -38,14 +38,19 @@ void GameEngine::Run()
 		spriteMap["Player"] = new Sprite("Player", 1280 / 2, 720 / 2, "res/B_Player.png", true);
 		spriteMap["Player"]->s = 5;
 		spriteMap["Player"]->setAnimator(50, 50, { {5,5} }, { 8 });
+		spriteMap["1"] = new Bullet("1", 100, 100, "res/1.png", true, {0, 0}, DEFAULT);
+		spriteMap["1"]->setAnimator(1, 1, { {1,1} }, { 1 });
+		spriteMap["1"]->s = 5;
+		hitboxMap["1"] = new Hitbox(5, 5, spriteMap["1"], 0, 0);
+		Load(spriteMap["1"]);
 		Load(spriteMap["Player"]);
 		ORDER++;
 		break;
 	case 1:
 		window.SetBackgroundColor(255, 255, 255, 255);
 		Control(spriteMap["Player"], 5);
-		Clone(spriteMap["Player"]);
-		spriteMap["Player"]->loopAniWhen(0, keyInput.wait(0.1, 0));
+		spriteMap["Player"]->loopAnimationWhen(0, keyInput.wait(0.1, 0));
+		ShootFromWith(spriteMap["Player"], dynamic_cast<Bullet*>(spriteMap["1"]), keyInput.mx, keyInput.my, 5);
 		break;
 	}
 }
@@ -58,7 +63,7 @@ bool GameEngine::IsRunning()
 void GameEngine::UpdateSprites()
 {
 	for (auto it = spriteMap.begin(); it != spriteMap.end(); it++) {
-		it->second->Update();
+		it->second->Update(DELTA);
 		if (it->second->visible) {
 			if (!window.FindLoaded(it->second->img)) {
 				Load(it->second);
@@ -132,13 +137,31 @@ void GameEngine::Clone(Sprite* sprite)
 {
 	std::string name = sprite->name + std::to_string(spriteMap.size());
 	spriteMap[name] = new Sprite(name, *sprite);
+
+	if (hitboxMap.find(sprite->name) != hitboxMap.end()) {
+		hitboxMap[name] = new Hitbox(*hitboxMap[sprite->name], sprite);
+	}
+}
+
+void GameEngine::Clone(Sprite* sprite, int xpos, int ypos, bool show)
+{
+	std::string name = sprite->name + std::to_string(spriteMap.size());
+	Sprite newSprite(name, *sprite);
+	newSprite.x = xpos;
+	newSprite.y = ypos;
+	newSprite.visible = show;
+	spriteMap[name] = new Sprite(name, newSprite);
+
+	if (hitboxMap.find(sprite->name) != hitboxMap.end()) {
+		hitboxMap[name] = new Hitbox(*hitboxMap[sprite->name], sprite);
+	}
 }
 
 void GameEngine::ShootFromWith(Sprite* sprite, Bullet* bullet, double xpos, double ypos, double speed)
 {
-	std::string name = "bullet" + std::to_string(spriteMap.size());
-	spriteMap[name] = new Bullet(name, sprite->x, sprite->y, bullet->img, true, UnitVect(speed, xpos - sprite->x, ypos - sprite->y), bullet->type);
-	hitboxMap[name] = new Hitbox(5 * 5, 5 * 5, spriteMap[name], 0, 0);
+	std::string name = bullet->name + std::to_string(spriteMap.size());
+	spriteMap[name] = new Bullet(name, *bullet, sprite->x, sprite->y, UnitVect(speed, xpos - sprite->x, ypos - sprite->y));
+	hitboxMap[name] = new Hitbox(*hitboxMap[bullet->name], spriteMap[name]);
 }
 
 bool GameEngine::Collision(objectType t1, objectType t2)
