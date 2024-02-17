@@ -11,8 +11,9 @@ WindowRenderer::WindowRenderer()
 	IMG_Init(IMG_INIT_PNG);
 	window_width = WINDOW_WIDTH;
 	window_height = WINDOW_HEIGHT;
-	window = SDL_CreateWindow("Title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Lost In Twilight", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, 0);
+	SDL_RenderSetLogicalSize(renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
 void WindowRenderer::Present()
