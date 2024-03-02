@@ -4,9 +4,8 @@
 
 InputEventHandler::InputEventHandler()
 {
-	exit = a = s = d = w = ml = mr = mlc = mrc = false;
+	exit = a = s = d = w = ml = mr = mlc = mrc = f11 = f11c = false;
 	mx = my = 0;
-	umlc = umrc = false;
 	frameCount = 0;
 	secCount = secCount = 0;
 	FPS = nullptr;
@@ -42,6 +41,9 @@ void InputEventHandler::updateInputs()
 			case SDLK_a:
 				a = 1;
 				break;
+			case SDLK_F11:
+				f11 = 1;
+				break;
 			}
 			break;
 		case SDL_KEYUP:
@@ -57,6 +59,9 @@ void InputEventHandler::updateInputs()
 				break;
 			case SDLK_a:
 				a = 0;
+				break;
+			case SDLK_F11:
+				f11 = 0;
 				break;
 			}
 			break;
@@ -82,8 +87,10 @@ void InputEventHandler::updateInputs()
 			break;
 		}
 	}
-	updateClicks(ml, mlc, umlc);
-	updateClicks(mr, mrc, umrc);
+	updateClicks(ml, mlc, 0);
+	updateClicks(mr, mrc, 1);
+	updateClicks(f11, f11c, 2);
+
 	SDL_GetMouseState(&mx, &my);
 	frameCount++;
 	secCount = (double)frameCount / *FPS;
@@ -98,19 +105,6 @@ void InputEventHandler::updateInputs()
 	}
 }
 
-void InputEventHandler::updateClicks(bool a, bool& ac, bool& uac)
-{
-	if (a && !ac && !uac) {
-		ac = uac = true;
-	}
-	else if (ac && uac) {
-		ac = false;
-	}
-	else if (!a && uac) {
-		ac = uac = false;
-	}
-}
-
 bool InputEventHandler::wait(double sec, int specialKey)
 {
 	// starts at 0 if first time used
@@ -122,4 +116,24 @@ bool InputEventHandler::wait(double sec, int specialKey)
 		return true;
 	}
 	return false;
+}
+
+void InputEventHandler::updateClicks(bool a, bool& ac, int type)
+{
+	if (type >= u.size()) {
+		int size = u.size();
+		for (int i = 0; i <= type - size; i++) {
+			u.push_back(false);
+		}
+	}
+
+	if (a && !ac && !u[type]) {
+		ac = u[type] = true;
+	}
+	else if (ac && u[type]) {
+		ac = false;
+	}
+	else if (!a && u[type]) {
+		ac = u[type] = false;
+	}
 }

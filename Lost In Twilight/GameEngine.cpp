@@ -27,6 +27,7 @@ void GameEngine::Update()
 	Run();
 	UpdateSprites();
 	UpdateHitboxes();
+	UpdateWindow();
 	window.Present();
 }
 
@@ -50,7 +51,9 @@ void GameEngine::Run()
 		window.SetBackgroundColor(255, 255, 255, 255);
 		Control(spriteMap["Player"], 5);
 		spriteMap["Player"]->loopAnimationWhen(0, keyInput.wait(0.5, 0));
-		ShootFromWith(spriteMap["Player"], dynamic_cast<Bullet*>(spriteMap["1"]), keyInput.mx, keyInput.my, 5);
+		if (keyInput.mlc) {
+			ShootFromWith(spriteMap["Player"], dynamic_cast<Bullet*>(spriteMap["1"]), keyInput.mx, keyInput.my, 5);
+		}
 		break;
 	}
 }
@@ -78,6 +81,13 @@ void GameEngine::UpdateHitboxes()
 {
 	for (auto it = hitboxMap.begin(); it != hitboxMap.end(); it++) {
 		it->second->Update();
+	}
+}
+
+void GameEngine::UpdateWindow()
+{
+	if (keyInput.f11c) {
+		window.ToggleFullscreen();
 	}
 }
 

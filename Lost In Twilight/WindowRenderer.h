@@ -21,6 +21,7 @@ public:
 	void DrawTexture(std::string filename, int x, int y, double degrees, SDL_RendererFlip flip);
 	void DrawTexture(std::string filename, int xpos, int ypos, int x, int y, int w, int h, double degrees, double scale, SDL_RendererFlip flip);
 	bool FindLoaded(std::string filename);
+	void ToggleFullscreen();
 	~WindowRenderer();
 private:
 	SDL_Window* window;

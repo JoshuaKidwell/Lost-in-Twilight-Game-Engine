@@ -17,6 +17,7 @@ public:
 	bool IsRunning();
 	void UpdateSprites();
 	void UpdateHitboxes();
+	void UpdateWindow();
 	void Load(Sprite*);
 	void Unload(Sprite*);
 	void Draw(Sprite*);

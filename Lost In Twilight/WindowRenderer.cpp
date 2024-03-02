@@ -127,6 +127,11 @@ bool WindowRenderer::FindLoaded(std::string filename)
 	return textureMap.find(filename) != textureMap.end();
 }
 
+void WindowRenderer::ToggleFullscreen()
+{
+	SDL_SetWindowFullscreen(window, (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN) ? 0 : SDL_WINDOW_FULLSCREEN);
+}
+
 WindowRenderer::~WindowRenderer()
 {
 	ClearAllTextures();
