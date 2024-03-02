@@ -16,13 +16,13 @@ GameEngine::GameEngine(int* fps)
 	ORDER = 0;
 	FPS = fps;
 	keyInput.setFps(fps);
-	DELTA = 60 / (double)(*FPS);
+	DELTA = DESIRED_FPS / (double)(*FPS);
 }
 
 void GameEngine::Update()
 {
 	keyInput.updateInputs();
-	DELTA = 60 / (double)(*FPS);
+	DELTA = DESIRED_FPS / (double)(*FPS);
 	RunInputs();
 	Run();
 	UpdateSprites();
@@ -49,7 +49,7 @@ void GameEngine::Run()
 	case 1:
 		window.SetBackgroundColor(255, 255, 255, 255);
 		Control(spriteMap["Player"], 5);
-		spriteMap["Player"]->loopAnimationWhen(0, keyInput.wait(0.1, 0));
+		spriteMap["Player"]->loopAnimationWhen(0, keyInput.wait(0.5, 0));
 		ShootFromWith(spriteMap["Player"], dynamic_cast<Bullet*>(spriteMap["1"]), keyInput.mx, keyInput.my, 5);
 		break;
 	}

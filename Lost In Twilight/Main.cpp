@@ -2,7 +2,7 @@
 #include "GameEngine.h"
 #include <iostream>
 
-const int DESIRED_FPS = 60;
+#include "ObjectType.h"
 
 int main(int argc, char* args[])
 {
@@ -21,7 +21,6 @@ int main(int argc, char* args[])
 		////////////////////////////////////////
 
 		LostInTwilight.Update();
-		std::cout << "(" << fps << ")";
 
 		////////////////////////////////////////
 		if (SDL_GetTicks() - startTick < frameDelay) {
