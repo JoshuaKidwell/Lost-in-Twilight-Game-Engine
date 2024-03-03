@@ -9,6 +9,7 @@
 #include "Bullet.h"
 #include "Hitbox.h"
 #include "ObjectType.h"
+#include "GlobalVariables.h"
 
 GameEngine::GameEngine(int* fps)
 {
@@ -21,7 +22,7 @@ GameEngine::GameEngine(int* fps)
 
 void GameEngine::Update()
 {
-	keyInput.updateInputs();
+	keyInput.updateInputs(window.GetWindowWidth(), window.GetWindowHeight());
 	DELTA = DESIRED_FPS / (double)(*FPS);
 	RunInputs();
 	Run();
@@ -37,11 +38,11 @@ void GameEngine::Run()
 	case 0:
 		window.SetBackgroundColor(255, 255, 255, 255);
 		spriteMap["Player"] = new Sprite("Player", 1280 / 2, 720 / 2, "res/B_Player.png", true);
-		spriteMap["Player"]->s = 5;
+		spriteMap["Player"]->s = 10;
 		spriteMap["Player"]->setAnimator(50, 50, { {5,5} }, { 8 });
 		spriteMap["1"] = new Bullet("1", 0, 0, "res/1.png", false, {0, 0}, DEFAULT);
 		spriteMap["1"]->setAnimator(1, 1, { {1,1} }, { 1 });
-		spriteMap["1"]->s = 5;
+		spriteMap["1"]->s = 10;
 		hitboxMap["1"] = new Hitbox(5, 5, spriteMap["1"], 0, 0);
 		Load(spriteMap["1"]);
 		Load(spriteMap["Player"]);

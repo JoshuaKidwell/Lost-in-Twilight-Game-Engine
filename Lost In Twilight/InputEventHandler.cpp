@@ -16,7 +16,7 @@ void InputEventHandler::setFps(int* fps)
 	FPS = fps;
 }
 
-void InputEventHandler::updateInputs()
+void InputEventHandler::updateInputs(int window_width, int window_height)
 {
 	while (SDL_PollEvent(&event) != 0)
 	{
@@ -85,13 +85,17 @@ void InputEventHandler::updateInputs()
 				break;
 			}
 			break;
+		case SDL_MOUSEMOTION:
+			//mx = event.motion.x * ((float)WINDOW_WIDTH / window_width);
+			//my = event.motion.y * ((float)WINDOW_HEIGHT / window_height);
+			mx = event.motion.x;
+			my = event.motion.y;
 		}
 	}
 	updateClicks(ml, mlc, 0);
 	updateClicks(mr, mrc, 1);
 	updateClicks(f11, f11c, 2);
 
-	SDL_GetMouseState(&mx, &my);
 	frameCount++;
 	secCount = (double)frameCount / *FPS;
 

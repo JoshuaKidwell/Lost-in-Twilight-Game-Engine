@@ -22,6 +22,9 @@ public:
 	void DrawTexture(std::string filename, int xpos, int ypos, int x, int y, int w, int h, double degrees, double scale, SDL_RendererFlip flip);
 	bool FindLoaded(std::string filename);
 	void ToggleFullscreen();
+	void SetAllSize(int w, int h);
+	int GetWindowWidth();
+	int GetWindowHeight();
 	~WindowRenderer();
 private:
 	SDL_Window* window;

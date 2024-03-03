@@ -1,8 +1,7 @@
 #include <SDL.h>
 #include "GameEngine.h"
 #include <iostream>
-
-#include "ObjectType.h"
+#include "GlobalVariables.h"
 
 int main(int argc, char* args[])
 {

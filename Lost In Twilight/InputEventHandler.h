@@ -2,6 +2,7 @@
 #define INPUTEVENTHANDLER_H
 
 #include <SDL.h>
+#include "GlobalVariables.h"
 #include <map>
 #include <vector>
 
@@ -10,7 +11,7 @@ class InputEventHandler
 public:
 	InputEventHandler();
 	void setFps(int* fps);
-	void updateInputs();
+	void updateInputs(int, int);
 
 	//Accessable Key information true=presssed/false=unpressed
 	bool exit;
