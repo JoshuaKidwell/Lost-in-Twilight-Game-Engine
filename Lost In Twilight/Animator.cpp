@@ -48,10 +48,10 @@ void Animator::setPosSheet()
 		mod_width = 99999; //increase this if your width is bigger than 99999 pixels
 		y = start_y;
 		for (int c = 0; c < sheet_counts[i]; c++) {
-			x = (sheet_sizes[i].first * c + c) % mod_width;
+			x = sheet_sizes[i].first * (c % mod_width) + c % mod_width;
 			if (x + sheet_sizes[i].first > full_w) {
 				mod_width = c;
-				x = (sheet_sizes[i].first * c + c) % mod_width;
+				x = sheet_sizes[i].first * (c % mod_width) + c % mod_width;
 			}
 			if (x == 0 && c != 0) {
 				y += sheet_sizes[i].second + 1;
