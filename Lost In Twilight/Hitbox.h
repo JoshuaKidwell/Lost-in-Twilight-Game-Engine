@@ -15,12 +15,13 @@ public:
 	bool IsOn(Hitbox* hit2);
 	bool IsOnExtended(Hitbox* hit2, int ext);
 	bool pointInBox(int xpos, int ypos);
+	double AngleOut(Hitbox*);
 	void Update();
 	int w;
 	int h;
-	double s;
 	int x;
 	int y;
+	double s;
 	double chanX;
 	double chanY;
 	bool active;

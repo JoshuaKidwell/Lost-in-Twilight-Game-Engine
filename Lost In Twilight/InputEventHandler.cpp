@@ -4,7 +4,7 @@
 
 InputEventHandler::InputEventHandler()
 {
-	exit = a = s = d = w = ml = mr = mlc = mrc = f11 = f11c = false;
+	exit = a = s = d = w = ml = mr = mlc = mrc = f11 = f11c = h = hc = false;
 	mx = my = 0;
 	frameCount = 0;
 	secCount = secCount = 0;
@@ -41,6 +41,9 @@ void InputEventHandler::updateInputs(int window_width, int window_height)
 			case SDLK_a:
 				a = 1;
 				break;
+			case SDLK_h:
+				h = 1;
+				break;
 			case SDLK_F11:
 				f11 = 1;
 				break;
@@ -59,6 +62,9 @@ void InputEventHandler::updateInputs(int window_width, int window_height)
 				break;
 			case SDLK_a:
 				a = 0;
+				break;
+			case SDLK_h:
+				h = 0;
 				break;
 			case SDLK_F11:
 				f11 = 0;
@@ -95,6 +101,7 @@ void InputEventHandler::updateInputs(int window_width, int window_height)
 	updateClicks(ml, mlc, 0);
 	updateClicks(mr, mrc, 1);
 	updateClicks(f11, f11c, 2);
+	updateClicks(h, hc, 3);
 
 	frameCount++;
 	secCount = (double)frameCount / *FPS;

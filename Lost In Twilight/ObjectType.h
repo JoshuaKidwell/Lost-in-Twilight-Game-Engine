@@ -5,7 +5,9 @@ enum objectType {
 	DEFAULT,
 	F_PLAYER,
 	BULLET,
-	B_PLAYER
+	B_PLAYER,
+	WALL,
+	W_EDGE
 };
 
 bool operator==(objectType a, objectType b);

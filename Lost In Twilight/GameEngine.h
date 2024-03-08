@@ -15,6 +15,7 @@ public:
 	GameEngine(int* fps);
 	void Update();
 	void Run();
+	void Commands();
 	bool IsRunning();
 	void UpdateSprites();
 	void UpdateHitboxes();
@@ -28,11 +29,12 @@ public:
 	void Clone(Sprite*);
 	void Clone(Sprite*, int xpos, int ypos, bool show);
 	std::string ShootFromWith(Sprite* sprite, Bullet* bullet, double, double, double speed);
-	void AngleSpriteToVelo(Sprite* sprite, double chanA);
+	void AngleSpriteToVelo(Sprite* sprite);
 	bool Collision(objectType, objectType);
 	bool Collision(Hitbox*, objectType);
 	bool CollisionIgnore(objectType, objectType, Hitbox*);
 	std::pair<double, double> UnitVect(double speed, double x, double y);
+	std::pair<double, double> SetVectToAngle(double a, std::pair<double, double> v);
 	~GameEngine();
 private:
 	bool gameRunning;
@@ -43,10 +45,11 @@ private:
 	WindowRenderer window;
 	std::map<std::string, Sprite*> SM;
 	std::map<std::string, Hitbox*> HM;
+	std::pair<Hitbox*, Hitbox*> LastCollision;
 
 	std::map<std::string, bool> B; //sort of global booleans
 	std::map<std::string, int> I; //sort of global integers
-	std::map<std::string, std::string> S;
+	std::map<std::string, std::string> S; //you get the point
 };
 
 #endif

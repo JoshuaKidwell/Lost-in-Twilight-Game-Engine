@@ -16,6 +16,7 @@ Bullet::Bullet(std::string spriteName, double xpos, double ypos, const char* img
 	visible = show;
 	v = velo;
 	a = 0;
+	angleOffset = 0;
 	s = 0;
 
 	bounces = 0;
@@ -33,6 +34,7 @@ Bullet::Bullet(std::string spriteName, Bullet& bullet, double xpos, double ypos,
 	v = velo;
 	a = bullet.a;
 	s = bullet.s;
+	angleOffset = bullet.angleOffset;
 	animator = bullet.animator;
 
 	bounces = bullet.bounces;

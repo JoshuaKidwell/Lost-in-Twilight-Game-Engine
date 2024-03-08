@@ -21,6 +21,8 @@ public:
 	bool s;
 	bool d;
 	bool a;
+	bool h;
+	bool hc;
 
 	bool ml;
 	bool mlc;

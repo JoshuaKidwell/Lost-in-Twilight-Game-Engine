@@ -26,6 +26,7 @@ void GameEngine::Update()
 	DELTA = DESIRED_FPS / (double)(*FPS);
 	RunInputs();
 	Run();
+	Commands();
 	UpdateSprites();
 	UpdateHitboxes();
 	UpdateWindow();
@@ -36,21 +37,28 @@ void GameEngine::Run()
 {
 	switch (ORDER) {
 	case 0:
-		//B["viewHitboxes"] = true;
-
 		window.SetBackgroundColor(0, 0, 0, 255);
 
 		SM["F_P"] = new Sprite("F_P", 320 / 2, 240 / 2, "res/F_Player.png", true, F_PLAYER);
 		SM["F_P"]->setAnimator(62, 62, { {8,8}, {8,8} }, { 20, 20 });
 		SM["F_P"]->setAnimationOrder(1);
 		SM["F_P"]->s = 10;
-		HM["F_P"] = new Hitbox(6, 6, SM["F_P"], -3, -3);
+		HM["F_P"] = new Hitbox(6, 6, SM["F_P"], 0, 0);
 
 		SM["B_P"] = new Bullet("B_P", -100, -100, "res/B_Player.png", false, B_PLAYER);
 		SM["B_P"]->setAnimator(35, 35, { {3,3} }, { 18 });
 		SM["B_P"]->setAnimationOrder(0);
+		SM["B_P"]->angleOffset = 45;
 		SM["B_P"]->s = 10;
-		HM["B_P"] = new Hitbox(1, 1, SM["B_P"], 0.5, -1.5);
+		HM["B_P"] = new Hitbox(1, 1, SM["B_P"], 1, -1);
+
+		SM["W_Edge"] = new Sprite("W_Edge", 1280 / 2, 720 / 2, "res/W_Edge.png", true, W_EDGE);
+		SM["W_Edge"]->setAnimator(128, 72, { { 128,72 } }, { 1 });
+		SM["W_Edge"]->s = 10;
+		HM["W_Edge1"] = new Hitbox(6, 72, SM["W_Edge"], 128 / 2 - 3, 0);
+		HM["W_Edge2"] = new Hitbox(128, 6, SM["W_Edge"], 0, 72 / 2 - 3);
+		HM["W_Edge3"] = new Hitbox(6, 72, SM["W_Edge"], -128 / 2 + 3, 0);
+		HM["W_Edge4"] = new Hitbox(128, 6, SM["W_Edge"], 0, -72 / 2 + 3);
 
 		I["PlayerBullets"] = 4;
 		B["PlayerLoad"] = false;
@@ -110,6 +118,18 @@ void GameEngine::Run()
 	}
 }
 
+void GameEngine::Commands()
+{
+	if (keyInput.hc) {
+		if (B["viewHitboxes"]) {
+			B["viewHitboxes"] = false;
+		}
+		else {
+			B["viewHitboxes"] = true;
+		}
+	}
+}
+
 bool GameEngine::IsRunning()
 {
 	return gameRunning;
@@ -130,7 +150,7 @@ void GameEngine::UpdateSprites()
 				it->second->nextAnimationWhen(keyInput.wait(0.1, 0));
 				break;
 			case B_PLAYER:
-				AngleSpriteToVelo(it->second, 45);
+				AngleSpriteToVelo(it->second);
 				it->second->nextAnimationWhen(keyInput.wait(0.2, 1));
 				break;
 			}
@@ -149,10 +169,21 @@ void GameEngine::UpdateHitboxes()
 			window.ViewHitbox(it->second->x, it->second->y, it->second->w, it->second->h);
 		}
 
-		if (it->second->type == B_PLAYER && !it->second->active) {
-			if (!it->second->IsOnExtended(HM["F_P"], 5)) {
-				it->second->active = true;
+		switch (it->second->type) {
+		case B_PLAYER:
+			//activate bullet once it leaves player hitbox
+			if (!it->second->active) {
+				if (!it->second->IsOnExtended(HM["F_P"], 5)) {
+					it->second->active = true;
+				}
 			}
+
+			//check if bullet hit wall
+			if (Collision(it->second, WALL)) {
+				it->second->sprite->a = LastCollision.second->AngleOut(it->second);
+				it->second->sprite->v = SetVectToAngle(it->second->sprite->a, it->second->sprite->v);
+			}
+			break;
 		}
 	}
 }
@@ -177,7 +208,7 @@ void GameEngine::Unload(Sprite* sprite)
 void GameEngine::Draw(Sprite* sprite)
 {
 	std::pair<std::pair<int, int>, std::pair<int, int>> sheet = sprite->curAni();
-	window.DrawTexture(sprite->img, sprite->x, sprite->y, sheet.first.first, sheet.first.second, sheet.second.first, sheet.second.second, sprite->a, sprite->s, SDL_FLIP_NONE);
+	window.DrawTexture(sprite->img, sprite->x, sprite->y, sheet.first.first, sheet.first.second, sheet.second.first, sheet.second.second, sprite->a + sprite->angleOffset, sprite->s, SDL_FLIP_NONE);
 }
 
 void GameEngine::Draw(Sprite* sprite, int order, int count)
@@ -250,7 +281,7 @@ std::string GameEngine::ShootFromWith(Sprite* sprite, Bullet* bullet, double xpo
 	return name;
 }
 
-void GameEngine::AngleSpriteToVelo(Sprite* sprite, double chanA)
+void GameEngine::AngleSpriteToVelo(Sprite* sprite)
 {
 	double x = sprite->v.first;
 	double y = sprite->v.second;
@@ -263,10 +294,10 @@ void GameEngine::AngleSpriteToVelo(Sprite* sprite, double chanA)
 		}
 	}
 	else if (x > 0) {
-		sprite->a = atan(y / x) * 180/3.1415 + chanA;
+		sprite->a = atan(y / x) * 180/3.1415;
 	}
 	else {
-		sprite->a = atan(y / x) * 180 / 3.1415 + chanA + 180;
+		sprite->a = atan(y / x) * 180 / 3.1415 + 180;
 	}
 }
 
@@ -278,6 +309,14 @@ bool GameEngine::Collision(objectType t1, objectType t2)
 				if (it != it2 && it2->second->active) {
 					if ((it->second->type == t1 && it2->second->type == t2) || (it->second->type == t2 && it2->second->type == t1)) {
 						if (it->second->IsOn(it2->second)) {
+							//set LastCollision to t1, t2
+							if ((it->second->type == t1 && it2->second->type == t2)) {
+								LastCollision = { it->second, it2->second };
+							}
+							else {
+								LastCollision = { it2->second, it->second };
+							}
+
 							return true;
 						}
 					}
@@ -295,6 +334,7 @@ bool GameEngine::Collision(Hitbox* h, objectType t)
 		if (it->second != h && it->second->active) {
 			if (it->second->type == t) {
 				if (it->second->IsOn(h)) {
+					LastCollision = { h, it->second };
 					return true;
 				}
 			}
@@ -313,6 +353,14 @@ bool GameEngine::CollisionIgnore(objectType t1, objectType t2, Hitbox* hit)
 				if (it != it2 && it2->second->active) {
 					if ((it->second->type == t1 && it2->second->type == t2) || (it->second->type == t2 && it2->second->type == t1)) {
 						if (it->second->IsOn(it2->second)) {
+							//set LastCollision to t1, t2
+							if ((it->second->type == t1 && it2->second->type == t2)) {
+								LastCollision = { it->second, it2->second };
+							}
+							else {
+								LastCollision = { it2->second, it->second };
+							}
+
 							return true;
 						}
 					}
@@ -329,6 +377,15 @@ std::pair<double, double> GameEngine::UnitVect(double speed, double x, double y)
 	vect.first = speed * x / sqrt(y * y + x * x);
 	vect.second = speed * y / sqrt(y * y + x * x);
 	return vect;
+}
+
+std::pair<double, double> GameEngine::SetVectToAngle(double a, std::pair<double, double> v)
+{
+	std::pair<double, double> newV;
+	double length = sqrt(v.first * v.first + v.second * v.second);
+	newV.second = length * sin(a * 3.1415 / 180);
+	newV.first = length * cos(a * 3.1415 / 180);
+	return newV;
 }
 
 GameEngine::~GameEngine()

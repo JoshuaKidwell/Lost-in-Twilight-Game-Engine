@@ -32,6 +32,7 @@ public:
 	double x;
 	double y;
 	double a;
+	double angleOffset;
 	double s;
 	std::pair<double, double> v;
 	bool visible;

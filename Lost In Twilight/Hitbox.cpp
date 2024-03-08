@@ -107,13 +107,43 @@ bool Hitbox::pointInBox(int xpos, int ypos)
 	return false;
 }
 
+double Hitbox::AngleOut(Hitbox* CH)
+{
+	//Could have error with angles not -180 to 180
+	//CH is the moving hit box
+	if (CH->y > y && CH->y + CH->h < y + h) {
+		return -CH->sprite->a + 180;
+	}
+	else if (CH->x > x && CH->x + CH->w < x + w) {
+		return -CH->sprite->a;
+	}
+	else if ((CH->x < x && CH->y < y) || (CH->x < x && CH->y < y + h)) {
+		if (CH->sprite->a <= 45 && CH->sprite->a >= -45) {
+			return -CH->sprite->a + 180;
+		}
+		else {
+			return -CH->sprite->a;
+		}
+	}
+	else if ((CH->x > x && CH->y < y) || (CH->x > x && CH->y < y + h)) {
+		if (CH->sprite->a >= 135 && CH->sprite->a <= -135) {
+			return -CH->sprite->a + 180;
+		}
+		else {
+			return -CH->sprite->a;
+		}
+	}
+
+	return 90;
+}
+
 void Hitbox::Update()
 {
-	int xr = chanX * s + w/2.0;
-	int yr = chanY * s + h/2.0;
+	int xr = chanX * s;
+	int yr = chanY * s;
 
 	//finds point of the center of the rotated section in the sprite, then adjusts acordingly
 
-	x = sprite->x - w/2.0 + (xr * cos(sprite->a * 3.1415 / 180) - yr * sin(sprite->a * 3.1415 / 180));
-	y = sprite->y - h/2.0 + (yr * cos(sprite->a * 3.1415 / 180) + xr * sin(sprite->a * 3.1415 / 180));
+	x = sprite->x - w/2 + (xr * cos((sprite->a + sprite->angleOffset) * 3.1415 / 180) - yr * sin((sprite->a + sprite->angleOffset) * 3.1415 / 180));
+	y = sprite->y - h/2 + (yr * cos((sprite->a + sprite->angleOffset) * 3.1415 / 180) + xr * sin((sprite->a + sprite->angleOffset) * 3.1415 / 180));
 }

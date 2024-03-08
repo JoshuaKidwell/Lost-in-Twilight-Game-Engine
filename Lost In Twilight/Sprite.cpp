@@ -12,6 +12,7 @@ Sprite::Sprite()
 	v.first = 0;
 	v.second = 0;
 	a = 0;
+	angleOffset = 0;
 }
 
 Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show)
@@ -24,6 +25,7 @@ Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* img
 	v.first = 0;
 	v.second = 0;
 	a = 0;
+	angleOffset = 0;
 	s = 1;
 	type = DEFAULT;
 }
@@ -38,6 +40,7 @@ Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* img
 	v.first = 0;
 	v.second = 0;
 	a = 0;
+	angleOffset = 0;
 	s = 1;
 	type = stype;
 }
@@ -52,6 +55,7 @@ Sprite::Sprite(std::string spriteName, Sprite& sprite)
 	v.first = 0;
 	v.second = 0;
 	a = sprite.a;
+	angleOffset = sprite.angleOffset;
 	s = sprite.s;
 	type = sprite.type;
 	animator = sprite.animator;
@@ -60,6 +64,11 @@ Sprite::Sprite(std::string spriteName, Sprite& sprite)
 void Sprite::Update(double delta)
 {
 	move(delta);
+
+	//set angle between 180 and -180
+	if (a > 180 || a < -180) {
+		a = a - (int)a + (((int)a + 180) % 360 - 180);
+	}
 }
 
 void Sprite::setPos(double xpos, double ypos) { x = xpos; y = ypos; }
