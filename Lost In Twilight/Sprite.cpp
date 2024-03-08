@@ -87,10 +87,38 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Sprite::getSheet(int order, 
 	return animator.getSheet(order, count);
 }
 
-void Sprite::loopAnimationWhen(int order, bool t)
+void Sprite::setAnimationOrder(int order)
 {
+	animationOrder = order;
+}
+
+void Sprite::nextAnimationWhen(int order, bool t)
+{
+	animationOrder = order;
 	if (t)
 		animator.loop(order);
+}
+
+void Sprite::nextAnimation(int order)
+{
+	animationOrder = order;
+	animator.loop(order);
+}
+
+void Sprite::nextAnimation()
+{
+	animator.loop(animationOrder);
+}
+
+void Sprite::nextAnimationWhen(bool t)
+{
+	if (t)
+		animator.loop(animationOrder);
+}
+
+int Sprite::getFrameNum()
+{
+	return animator.looping_count;
 }
 
 Sprite::~Sprite()

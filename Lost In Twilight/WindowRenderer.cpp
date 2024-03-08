@@ -12,6 +12,7 @@ WindowRenderer::WindowRenderer()
 	window = SDL_CreateWindow("Lost In Twilight", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	SDL_RenderSetLogicalSize(renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
 	window_width = 1280;
 	window_height = 720;
@@ -148,6 +149,12 @@ int WindowRenderer::GetWindowWidth()
 int WindowRenderer::GetWindowHeight()
 {
 	return window_height;
+}
+
+void WindowRenderer::ViewHitbox(int xpos, int ypos, int w, int h)
+{
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 150);
+	DrawRectangle(xpos, ypos, w, h);
 }
 
 WindowRenderer::~WindowRenderer()

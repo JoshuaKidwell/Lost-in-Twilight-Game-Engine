@@ -5,6 +5,7 @@
 #include "InputEventHandler.h"
 #include "Sprite.h"
 #include <map>
+#include <vector>
 #include <string>
 #include "Bullet.h"
 #include "Hitbox.h"
@@ -26,8 +27,11 @@ public:
 	void Control(Sprite* sprite, double speed);
 	void Clone(Sprite*);
 	void Clone(Sprite*, int xpos, int ypos, bool show);
-	void ShootFromWith(Sprite* sprite, Bullet* bullet, double, double, double speed);
+	std::string ShootFromWith(Sprite* sprite, Bullet* bullet, double, double, double speed);
+	void AngleSpriteToVelo(Sprite* sprite, double chanA);
 	bool Collision(objectType, objectType);
+	bool Collision(Hitbox*, objectType);
+	bool CollisionIgnore(objectType, objectType, Hitbox*);
 	std::pair<double, double> UnitVect(double speed, double x, double y);
 	~GameEngine();
 private:
@@ -37,8 +41,12 @@ private:
 	double DELTA;
 	InputEventHandler keyInput;
 	WindowRenderer window;
-	std::map<std::string, Sprite*> spriteMap;
-	std::map<std::string, Hitbox*> hitboxMap;
+	std::map<std::string, Sprite*> SM;
+	std::map<std::string, Hitbox*> HM;
+
+	std::map<std::string, bool> B; //sort of global booleans
+	std::map<std::string, int> I; //sort of global integers
+	std::map<std::string, std::string> S;
 };
 
 #endif

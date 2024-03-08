@@ -20,7 +20,12 @@ public:
 	void setAnimator(int fullW, int fullH, std::vector<std::pair<int, int>> sheetSizes, std::vector<int> sheetCounts);
 	std::pair<std::pair<int, int>, std::pair<int, int>> curAni();
 	std::pair<std::pair<int, int>, std::pair<int, int>> getSheet(int order, int count);
-	void loopAnimationWhen(int order, bool);
+	void setAnimationOrder(int order);
+	void nextAnimationWhen(int order, bool);
+	void nextAnimation(int order);
+	void nextAnimation();
+	void nextAnimationWhen(bool);
+	int getFrameNum();
 
 	std::string name;
 	objectType type;
@@ -34,6 +39,7 @@ public:
 
 	virtual ~Sprite();
 protected:
+	int animationOrder;
 	Animator animator;
 };
 

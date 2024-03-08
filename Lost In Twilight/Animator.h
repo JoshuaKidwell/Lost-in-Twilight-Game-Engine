@@ -2,6 +2,7 @@
 #define ANIMATOR_H
 
 #include <vector>
+#include <queue>
 
 class Animator
 {
@@ -21,6 +22,7 @@ private:
 	std::vector<std::pair<int, int>> sheet_sizes;
 	std::vector<int> sheet_counts;
 	std::vector<std::vector<std::pair<int, int>>> sheet_pos;
+	std::queue<int> keyframe;
 };
 
 #endif

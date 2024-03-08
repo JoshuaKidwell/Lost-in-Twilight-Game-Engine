@@ -3,7 +3,11 @@
 
 enum objectType {
 	DEFAULT,
-	B_ARROW
+	F_PLAYER,
+	BULLET,
+	B_PLAYER
 };
+
+bool operator==(objectType a, objectType b);
 
 #endif

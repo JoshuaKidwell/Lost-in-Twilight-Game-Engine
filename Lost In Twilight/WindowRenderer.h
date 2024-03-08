@@ -25,6 +25,7 @@ public:
 	void SetAllSize(int w, int h);
 	int GetWindowWidth();
 	int GetWindowHeight();
+	void ViewHitbox(int xpos, int ypos, int w, int h);
 	~WindowRenderer();
 private:
 	SDL_Window* window;
