@@ -25,16 +25,20 @@ public:
 	void Draw(Sprite*);
 	void Draw(Sprite*, int order, int count);
 	void RunInputs();
-	void Control(Sprite* sprite, double speed);
+	/////////////////////////////////////////////////////////////////////////
 	void Clone(Sprite*);
 	void Clone(Sprite*, int xpos, int ypos, bool show);
 	std::string ShootFromWith(Sprite* sprite, Bullet* bullet, double, double, double speed);
 	void AngleSpriteToVelo(Sprite* sprite);
 	bool Collision(objectType, objectType);
 	bool Collision(Hitbox*, objectType);
+	bool CollisionExtended(Hitbox*, objectType, int ext);
 	bool CollisionIgnore(objectType, objectType, Hitbox*);
 	std::pair<double, double> UnitVect(double speed, double x, double y);
 	std::pair<double, double> SetVectToAngle(double a, std::pair<double, double> v);
+	/////////////////////////////////////////////////////////////////////////
+	void Control(Sprite* sprite, double speed);
+	void LoadPlayerBullets(int bulletCount);
 	~GameEngine();
 private:
 	bool gameRunning;

@@ -45,6 +45,12 @@ void GameEngine::Run()
 		SM["F_P"]->s = 10;
 		HM["F_P"] = new Hitbox(6, 6, SM["F_P"], 0, 0);
 
+		SM["F_Enemy"] = new Sprite("F_Enemy", 1280 / 2, 720 / 2, "res/F_Enemy.png", true, F_PLAYER);
+		SM["F_Enemy"]->setAnimator(62, 62, { {8,8}, {8,8} }, { 20, 20 });
+		SM["F_Enemy"]->setAnimationOrder(1);
+		SM["F_Enemy"]->s = 10;
+		HM["F_Enemy"] = new Hitbox(6, 6, SM["F_Enemy"], 0, 0);
+
 		SM["B_P"] = new Bullet("B_P", -100, -100, "res/B_Player.png", false, B_PLAYER);
 		SM["B_P"]->setAnimator(35, 35, { {3,3} }, { 18 });
 		SM["B_P"]->setAnimationOrder(0);
@@ -69,50 +75,10 @@ void GameEngine::Run()
 		window.SetBackgroundColor(0, 0, 0, 255);
 
 		Control(SM["F_P"], 5);
-
-		//Loads and shoots bullets for player
-		if (keyInput.mlc && I["PlayerBullets"] != 0) {
-			HM[ShootFromWith(SM["F_P"], dynamic_cast<Bullet*>(SM["B_P"]), keyInput.mx, keyInput.my, 8)]->active = false;
-			I["PlayerBullets"] -= 1;
-		}
-		if (I["PlayerBullets"] < 4) {
-			B["PlayerLoad"] = true;
-		}
-		else {
-			B["PlayerLoad"] = false;
-		}
-
-		if (I["LastPlayerFrame"] != SM["F_P"]->getFrameNum()) {
-			switch (SM["F_P"]->getFrameNum()) {
-			case 0:
-			case 5:
-			case 10:
-			case 15:
-				if (B["PlayerLoad"]) {
-					SM["F_P"]->setAnimationOrder(0);
-					B["PlayerLoading"] = true;
-				}
-				else {
-					SM["F_P"]->setAnimationOrder(1);
-					B["PlayerLoading"] = false;
-				}
-				break;
-			case 4:
-			case 9:
-			case 14:
-			case 19:
-				if (B["PlayerLoading"]) {
-					I["PlayerBullets"]++;
-				}
-				break;
-			}
-		}
-		I["LastPlayerFrame"] = SM["F_P"]->getFrameNum();
-
-
-		if (Collision(BULLET, F_PLAYER)) {
-			std::cout << "OWWW";
-		}
+		LoadPlayerBullets(4);
+		
+		//Enemy AI
+		//SM["F_Enemy"]->v = UnitVect(5, -(SM["F_P"]->y - SM["F_Enemy"]->y) / (SM["F_P"]->x - SM["F_Enemy"]->x + 0.01), (SM["F_Enemy"]->x-SM["F_P"]->y) / abs(SM["F_Enemy"]->x - SM["F_P"]->y));
 
 		break;
 	}
@@ -224,29 +190,6 @@ void GameEngine::RunInputs()
 	}
 }
 
-void GameEngine::Control(Sprite* sprite, double speed)
-{
-	speed = speed * DELTA;
-	int vect[2] = { 0,0 };
-	if (keyInput.w) {
-		vect[1] -= 1;
-	}
-	if (keyInput.a) {
-		vect[0] -= 1;
-	}
-	if (keyInput.s) {
-		vect[1] += 1;
-	}
-	if (keyInput.d) {
-		vect[0] += 1;
-	}
-	if (vect[0] != 0 || vect[1] != 0)
-	{
-		std::pair<double, double> v = UnitVect(speed, vect[0], vect[1]);
-		sprite->chanPos(v.first, v.second);
-	}
-}
-
 void GameEngine::Clone(Sprite* sprite)
 {
 	std::string name = sprite->name + std::to_string(SM.size());
@@ -344,6 +287,23 @@ bool GameEngine::Collision(Hitbox* h, objectType t)
 	return false;
 }
 
+bool GameEngine::CollisionExtended(Hitbox* h, objectType t, int ext)
+{
+	//Does not check if h is active
+	for (auto it = HM.begin(); it != HM.end(); it++) {
+		if (it->second != h && it->second->active) {
+			if (it->second->type == t) {
+				if (it->second->IsOnExtended(h, ext)) {
+					LastCollision = { h, it->second };
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
 bool GameEngine::CollisionIgnore(objectType t1, objectType t2, Hitbox* hit)
 {
 	for (auto it = HM.begin(); it != HM.end(); it++) {
@@ -386,6 +346,86 @@ std::pair<double, double> GameEngine::SetVectToAngle(double a, std::pair<double,
 	newV.second = length * sin(a * 3.1415 / 180);
 	newV.first = length * cos(a * 3.1415 / 180);
 	return newV;
+}
+
+void GameEngine::Control(Sprite* sprite, double speed)
+{
+	speed = speed * DELTA;
+	int vect[2] = { 0,0 };
+	if (keyInput.w) {
+		vect[1] -= 1;
+	}
+	if (keyInput.a) {
+		vect[0] -= 1;
+	}
+	if (keyInput.s) {
+		vect[1] += 1;
+	}
+	if (keyInput.d) {
+		vect[0] += 1;
+	}
+	if (vect[0] != 0 || vect[1] != 0)
+	{
+		std::pair<double, double> v = UnitVect(speed, vect[0], vect[1]);
+
+		switch (sprite->type) {
+		case F_PLAYER:
+			sprite->chanPos(v.first, 0);
+			HM["F_P"]->Update();
+			if (CollisionExtended(HM["F_P"], WALL, 1 * sprite->s)) {
+				sprite->chanPos(-v.first, 0);
+				HM["F_P"]->Update();
+			}
+			sprite->chanPos(0, v.second);
+			HM["F_P"]->Update();
+			if (CollisionExtended(HM["F_P"], WALL, 1 * sprite->s)) {
+				sprite->chanPos(0, -v.second);
+				HM["F_P"]->Update();
+			}
+			break;
+		}
+	}
+}
+
+void GameEngine::LoadPlayerBullets(int bulletCount)
+{
+	if (keyInput.mlc && I["PlayerBullets"] != 0) {
+		HM[ShootFromWith(SM["F_P"], dynamic_cast<Bullet*>(SM["B_P"]), keyInput.mx, keyInput.my, 8)]->active = false;
+		I["PlayerBullets"] -= 1;
+	}
+	if (I["PlayerBullets"] < bulletCount) {
+		B["PlayerLoad"] = true;
+	}
+	else {
+		B["PlayerLoad"] = false;
+	}
+
+	if (I["LastPlayerFrame"] != SM["F_P"]->getFrameNum()) {
+		switch (SM["F_P"]->getFrameNum()) {
+		case 0:
+		case 5:
+		case 10:
+		case 15:
+			if (B["PlayerLoad"]) {
+				SM["F_P"]->setAnimationOrder(0);
+				B["PlayerLoading"] = true;
+			}
+			else {
+				SM["F_P"]->setAnimationOrder(1);
+				B["PlayerLoading"] = false;
+			}
+			break;
+		case 4:
+		case 9:
+		case 14:
+		case 19:
+			if (B["PlayerLoading"]) {
+				I["PlayerBullets"]++;
+			}
+			break;
+		}
+	}
+	I["LastPlayerFrame"] = SM["F_P"]->getFrameNum();
 }
 
 GameEngine::~GameEngine()
