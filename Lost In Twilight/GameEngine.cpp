@@ -13,6 +13,7 @@
 
 GameEngine::GameEngine(int* fps)
 {
+	SCALE = 15;
 	gameRunning = true;
 	ORDER = 0;
 	FPS = fps;
@@ -39,47 +40,36 @@ void GameEngine::Run()
 	case 0:
 		window.SetBackgroundColor(0, 0, 0, 255);
 
-		SM["F_P"] = new Sprite("F_P", 320 / 2, 240 / 2, "res/F_Player.png", true, F_PLAYER);
-		SM["F_P"]->setAnimator(62, 62, { {8,8}, {8,8} }, { 20, 20 });
-		SM["F_P"]->setAnimationOrder(1);
-		SM["F_P"]->s = 10;
-		HM["F_P"] = new Hitbox(6, 6, SM["F_P"], 0, 0);
+		SM["C_Player"] = new Sprite("C_Player", 1920 / 2, 1080 / 2, "res/C_Player.png", true, C_PLAYER, SCALE);
+		SM["C_Player"]->setAnimator(62, 62, { {8,8} }, { 7 });
+		SM["C_Player"]->setAnimationOrder(0);
+		HM["C_Player"] = new Hitbox(6, 6, SM["C_Player"], 0, 0);
 
-		SM["F_Enemy"] = new Sprite("F_Enemy", 1280 / 2, 720 / 2, "res/F_Enemy.png", true, F_PLAYER);
-		SM["F_Enemy"]->setAnimator(62, 62, { {8,8}, {8,8} }, { 20, 20 });
-		SM["F_Enemy"]->setAnimationOrder(1);
-		SM["F_Enemy"]->s = 10;
-		HM["F_Enemy"] = new Hitbox(6, 6, SM["F_Enemy"], 0, 0);
+		SM["B_Player"] = new Bullet("B_Player", -100, -100, "res/B_Player.png", false, B_PLAYER, SCALE);
+		SM["B_Player"]->setAnimator(35, 35, { {3,3} }, { 18 });
+		SM["B_Player"]->setAnimationOrder(0);
+		SM["B_Player"]->angleOffset = 45;
+		HM["B_Player"] = new Hitbox(1, 1, SM["B_Player"], 1, -1);
 
-		SM["B_P"] = new Bullet("B_P", -100, -100, "res/B_Player.png", false, B_PLAYER);
-		SM["B_P"]->setAnimator(35, 35, { {3,3} }, { 18 });
-		SM["B_P"]->setAnimationOrder(0);
-		SM["B_P"]->angleOffset = 45;
-		SM["B_P"]->s = 10;
-		HM["B_P"] = new Hitbox(1, 1, SM["B_P"], 1, -1);
-
-		SM["W_Edge"] = new Sprite("W_Edge", 1280 / 2, 720 / 2, "res/W_Edge.png", true, W_EDGE);
+		SM["W_Edge"] = new Sprite("W_Edge", 1920 / 2, 1080 / 2, "res/W_Edge.png", true, W_EDGE);
 		SM["W_Edge"]->setAnimator(128, 72, { { 128,72 } }, { 1 });
-		SM["W_Edge"]->s = 10;
+		SM["W_Edge"]->s = 15;
 		HM["W_Edge1"] = new Hitbox(6, 72, SM["W_Edge"], 128 / 2 - 3, 0);
 		HM["W_Edge2"] = new Hitbox(128, 6, SM["W_Edge"], 0, 72 / 2 - 3);
 		HM["W_Edge3"] = new Hitbox(6, 72, SM["W_Edge"], -128 / 2 + 3, 0);
 		HM["W_Edge4"] = new Hitbox(128, 6, SM["W_Edge"], 0, -72 / 2 + 3);
-
-		I["PlayerBullets"] = 4;
-		B["PlayerLoad"] = false;
 
 		ORDER++;
 		break;
 	case 1:
 		window.SetBackgroundColor(0, 0, 0, 255);
 
-		Control(SM["F_P"], 5);
-		LoadPlayerBullets(4);
-		
-		//Enemy AI
-		//SM["F_Enemy"]->v = UnitVect(5, -(SM["F_P"]->y - SM["F_Enemy"]->y) / (SM["F_P"]->x - SM["F_Enemy"]->x + 0.01), (SM["F_Enemy"]->x-SM["F_P"]->y) / abs(SM["F_Enemy"]->x - SM["F_P"]->y));
+		if (keyInput.mlc) {
+			ShootFromWith(SM["C_Player"], dynamic_cast<Bullet*>(SM["B_Player"]), keyInput.mx, keyInput.my, 10);
+		}
 
+		Control(SM["C_Player"], 5);
+		
 		break;
 	}
 }
@@ -112,8 +102,8 @@ void GameEngine::UpdateSprites()
 			}
 
 			switch (it->second->type) {
-			case F_PLAYER:
-				it->second->nextAnimationWhen(keyInput.wait(0.1, 0));
+			case C_PLAYER:
+				it->second->nextAnimationWhen(keyInput.wait(0.2, 0));
 				break;
 			case B_PLAYER:
 				AngleSpriteToVelo(it->second);
@@ -139,7 +129,7 @@ void GameEngine::UpdateHitboxes()
 		case B_PLAYER:
 			//activate bullet once it leaves player hitbox
 			if (!it->second->active) {
-				if (!it->second->IsOnExtended(HM["F_P"], 5)) {
+				if (!it->second->IsOnExtended(HM["C_Player"], 5)) {
 					it->second->active = true;
 				}
 			}
@@ -369,63 +359,22 @@ void GameEngine::Control(Sprite* sprite, double speed)
 		std::pair<double, double> v = UnitVect(speed, vect[0], vect[1]);
 
 		switch (sprite->type) {
-		case F_PLAYER:
+		case C_PLAYER:
 			sprite->chanPos(v.first, 0);
-			HM["F_P"]->Update();
-			if (CollisionExtended(HM["F_P"], WALL, 1 * sprite->s)) {
+			HM["C_Player"]->Update();
+			if (CollisionExtended(HM["C_Player"], WALL, 1 * sprite->s)) {
 				sprite->chanPos(-v.first, 0);
-				HM["F_P"]->Update();
+				HM["C_Player"]->Update();
 			}
 			sprite->chanPos(0, v.second);
-			HM["F_P"]->Update();
-			if (CollisionExtended(HM["F_P"], WALL, 1 * sprite->s)) {
+			HM["C_Player"]->Update();
+			if (CollisionExtended(HM["C_Player"], WALL, 1 * sprite->s)) {
 				sprite->chanPos(0, -v.second);
-				HM["F_P"]->Update();
+				HM["C_Player"]->Update();
 			}
 			break;
 		}
 	}
-}
-
-void GameEngine::LoadPlayerBullets(int bulletCount)
-{
-	if (keyInput.mlc && I["PlayerBullets"] != 0) {
-		HM[ShootFromWith(SM["F_P"], dynamic_cast<Bullet*>(SM["B_P"]), keyInput.mx, keyInput.my, 8)]->active = false;
-		I["PlayerBullets"] -= 1;
-	}
-	if (I["PlayerBullets"] < bulletCount) {
-		B["PlayerLoad"] = true;
-	}
-	else {
-		B["PlayerLoad"] = false;
-	}
-
-	if (I["LastPlayerFrame"] != SM["F_P"]->getFrameNum()) {
-		switch (SM["F_P"]->getFrameNum()) {
-		case 0:
-		case 5:
-		case 10:
-		case 15:
-			if (B["PlayerLoad"]) {
-				SM["F_P"]->setAnimationOrder(0);
-				B["PlayerLoading"] = true;
-			}
-			else {
-				SM["F_P"]->setAnimationOrder(1);
-				B["PlayerLoading"] = false;
-			}
-			break;
-		case 4:
-		case 9:
-		case 14:
-		case 19:
-			if (B["PlayerLoading"]) {
-				I["PlayerBullets"]++;
-			}
-			break;
-		}
-	}
-	I["LastPlayerFrame"] = SM["F_P"]->getFrameNum();
 }
 
 GameEngine::~GameEngine()

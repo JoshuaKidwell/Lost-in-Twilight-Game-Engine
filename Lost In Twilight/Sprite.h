@@ -12,6 +12,7 @@ public:
 	Sprite();
 	Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show);
 	Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show, objectType stype);
+	Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show, objectType stype, double scale);
 	Sprite(std::string spriteName, Sprite&);
 	void Update(double Delta);
 	void setPos(double x, double y);

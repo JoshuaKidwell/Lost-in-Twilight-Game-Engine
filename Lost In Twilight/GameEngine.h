@@ -38,13 +38,13 @@ public:
 	std::pair<double, double> SetVectToAngle(double a, std::pair<double, double> v);
 	/////////////////////////////////////////////////////////////////////////
 	void Control(Sprite* sprite, double speed);
-	void LoadPlayerBullets(int bulletCount);
 	~GameEngine();
 private:
 	bool gameRunning;
 	int ORDER;
 	int* FPS;
 	double DELTA;
+	double SCALE;
 	InputEventHandler keyInput;
 	WindowRenderer window;
 	std::map<std::string, Sprite*> SM;

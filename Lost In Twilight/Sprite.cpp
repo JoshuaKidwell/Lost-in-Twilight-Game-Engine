@@ -45,6 +45,21 @@ Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* img
 	type = stype;
 }
 
+Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show, objectType stype, double scale)
+{
+	name = spriteName;
+	x = xpos;
+	y = ypos;
+	img = imgfile;
+	visible = show;
+	v.first = 0;
+	v.second = 0;
+	a = 0;
+	angleOffset = 0;
+	s = scale;
+	type = stype;
+}
+
 Sprite::Sprite(std::string spriteName, Sprite& sprite)
 {
 	name = spriteName;

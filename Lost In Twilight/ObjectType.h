@@ -3,7 +3,7 @@
 
 enum objectType {
 	DEFAULT,
-	F_PLAYER,
+	C_PLAYER,
 	BULLET,
 	B_PLAYER,
 	WALL,

@@ -7,6 +7,12 @@ Bullet::Bullet(std::string spriteName, double xpos, double ypos, const char* img
 	hits = 0;
 }
 
+Bullet::Bullet(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show, objectType stype, double scale) : Sprite(spriteName, xpos, ypos, imgfile, show, stype, scale)
+{
+	bounces = 0;
+	hits = 0;
+}
+
 Bullet::Bullet(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show, std::pair<double, double> velo, objectType btype)
 { 
 	name = spriteName;

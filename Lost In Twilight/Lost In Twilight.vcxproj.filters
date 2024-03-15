@@ -72,4 +72,42 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\aniTest.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\arrow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\B_Enemy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\B_Player.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\C_Player.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\F_Enemy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\F_Player.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\jeff.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\link.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\player.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\W_Edge.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
