@@ -158,14 +158,11 @@
   <ItemGroup>
     <Image Include="res\1.png" />
     <Image Include="res\aniTest.png" />
-    <Image Include="res\arrow.png" />
-    <Image Include="res\B_Enemy.png" />
     <Image Include="res\B_Player.png" />
     <Image Include="res\C_Player.png" />
     <Image Include="res\F_Enemy.png" />
     <Image Include="res\F_Player.png" />
     <Image Include="res\jeff.png" />
-    <Image Include="res\link.png" />
     <Image Include="res\player.png" />
     <Image Include="res\W_Edge.png" />
   </ItemGroup>

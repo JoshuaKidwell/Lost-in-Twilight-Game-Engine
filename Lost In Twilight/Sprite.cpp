@@ -8,11 +8,13 @@ Sprite::Sprite()
 	name = "Jeff";
 	x = 0;
 	y = 0;
-	visible = true;
+	visible = false;
 	v.first = 0;
 	v.second = 0;
 	a = 0;
 	angleOffset = 0;
+	unused = true;
+	type = DEFAULT;
 }
 
 Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show)
@@ -28,6 +30,7 @@ Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* img
 	angleOffset = 0;
 	s = 1;
 	type = DEFAULT;
+	unused = false;
 }
 
 Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show, objectType stype)
@@ -43,6 +46,7 @@ Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* img
 	angleOffset = 0;
 	s = 1;
 	type = stype;
+	unused = false;
 }
 
 Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* imgfile, bool show, objectType stype, double scale)
@@ -58,6 +62,7 @@ Sprite::Sprite(std::string spriteName, double xpos, double ypos, const char* img
 	angleOffset = 0;
 	s = scale;
 	type = stype;
+	unused = false;
 }
 
 Sprite::Sprite(std::string spriteName, Sprite& sprite)
@@ -74,6 +79,7 @@ Sprite::Sprite(std::string spriteName, Sprite& sprite)
 	s = sprite.s;
 	type = sprite.type;
 	animator = sprite.animator;
+	unused = false;
 }
 
 void Sprite::Update(double delta)

@@ -45,7 +45,7 @@ void Animator::setPosSheet()
 	// this just gives you all positions of the animations
 	for (int i = 0; i < sheet_sizes.size(); i++) {
 		std::vector<std::pair<int, int>> single_sheet_pos;
-		mod_width = 99999; //increase this if your width is bigger than 99999 pixels
+		mod_width = 999999999; //increase this if your width is bigger than 999999999 pixels
 		y = start_y;
 		for (int c = 0; c < sheet_counts[i]; c++) {
 			x = sheet_sizes[i].first * (c % mod_width) + c % mod_width;

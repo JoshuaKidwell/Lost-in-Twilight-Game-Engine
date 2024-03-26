@@ -79,12 +79,6 @@
     <Image Include="res\aniTest.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\arrow.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\B_Enemy.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\B_Player.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -98,9 +92,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\jeff.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\link.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\player.png">

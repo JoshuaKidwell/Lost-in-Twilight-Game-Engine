@@ -7,11 +7,15 @@ bool operator==(objectType a, objectType b)
 		switch (static_cast<int>(b)) {
 		case static_cast<int>(B_PLAYER):
 			return true;
+		case static_cast<int>(B_ENEMY):
+			return true;
 		}
 	}
 	else if (static_cast<int>(b) == static_cast<int>(BULLET)) {
 		switch (static_cast<int>(a)) {
 		case static_cast<int>(B_PLAYER):
+			return true;
+		case static_cast<int>(B_ENEMY):
 			return true;
 		}
 	}
@@ -31,4 +35,9 @@ bool operator==(objectType a, objectType b)
 	}
 
 	return static_cast<int>(a) == static_cast<int>(b);
+}
+
+bool operator!=(objectType a, objectType b)
+{
+	return !(a==b);
 }

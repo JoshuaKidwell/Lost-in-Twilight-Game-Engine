@@ -37,6 +37,7 @@ public:
 	double s;
 	std::pair<double, double> v;
 	bool visible;
+	bool unused;
 	const char* img;
 
 	virtual ~Sprite();

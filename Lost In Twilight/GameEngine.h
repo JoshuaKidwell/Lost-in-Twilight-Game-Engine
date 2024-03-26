@@ -20,10 +20,12 @@ public:
 	void UpdateSprites();
 	void UpdateHitboxes();
 	void UpdateWindow();
+	void DrawAll();
 	void Load(Sprite*);
 	void Unload(Sprite*);
 	void Draw(Sprite*);
 	void Draw(Sprite*, int order, int count);
+	void Delete(std::string name);
 	void RunInputs();
 	/////////////////////////////////////////////////////////////////////////
 	void Clone(Sprite*);
@@ -36,8 +38,18 @@ public:
 	bool CollisionIgnore(objectType, objectType, Hitbox*);
 	std::pair<double, double> UnitVect(double speed, double x, double y);
 	std::pair<double, double> SetVectToAngle(double a, std::pair<double, double> v);
+	bool LineIntersection(std::pair<std::pair<int, int>, std::pair<int, int>> l1, std::pair<std::pair<int, int>, std::pair<int, int>> l2);
+	////////////////////////////////////////////////////////////////////////
+	bool HitboxBetweenHitboxes(Hitbox* s, Hitbox* t);
+	bool HitboxBetweenHitboxesIgnore(Hitbox* s, Hitbox* t, Hitbox* Wall);
+	Hitbox* ImaginaryHitbox(Hitbox* h, int x, int y);
+	int CheckWallBounce(Hitbox* shooter, Hitbox* target);
+	bool CheckWallSideBounce(Hitbox* wall, int side, Hitbox* s, Hitbox* t);
+	/////////////////////////////////////////////////////////////////////////
+	void Level1SetUp();
 	/////////////////////////////////////////////////////////////////////////
 	void Control(Sprite* sprite, double speed);
+	void StopAt(Hitbox*, objectType, double distanceFromType);
 	~GameEngine();
 private:
 	bool gameRunning;

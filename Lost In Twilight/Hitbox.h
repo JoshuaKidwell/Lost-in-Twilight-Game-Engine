@@ -25,8 +25,13 @@ public:
 	double chanX;
 	double chanY;
 	bool active;
+	bool isInverse;
+	std::pair<int, int> p[4];
 	objectType type;
 	Sprite* sprite;
+
+private:
+	void setPoints();
 };
 
 #endif

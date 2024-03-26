@@ -16,7 +16,11 @@ WindowRenderer::WindowRenderer()
 
 	window_width = 1280;
 	window_height = 720;
-	SetAllSize(window_width, window_height);
+	SDL_SetWindowSize(window, window_width, window_height);
+	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+
+	//View Outside
+	//SDL_RenderSetLogicalSize(renderer, WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2);
 }
 
 void WindowRenderer::Present()
@@ -135,12 +139,6 @@ void WindowRenderer::ToggleFullscreen()
 	SDL_SetWindowFullscreen(window, (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN) ? 0 : SDL_WINDOW_FULLSCREEN);
 }
 
-void WindowRenderer::SetAllSize(int w, int h)
-{
-	SDL_SetWindowSize(window, w, h);
-	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-}
-
 int WindowRenderer::GetWindowWidth()
 {
 	return window_width;
@@ -155,6 +153,15 @@ void WindowRenderer::ViewHitbox(int xpos, int ypos, int w, int h)
 {
 	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 150);
 	DrawRectangle(xpos, ypos, w, h);
+}
+
+void WindowRenderer::ViewInverseHitbox(int xpos, int ypos, int w, int h)
+{
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 150);
+	DrawRectangle(xpos - 5, ypos, 5, h);
+	DrawRectangle(xpos - 5, ypos - 5, w + 10, 5);
+	DrawRectangle(xpos + w, ypos, 5, h);
+	DrawRectangle(xpos - 5, ypos + h, w + 10, 5);
 }
 
 WindowRenderer::~WindowRenderer()

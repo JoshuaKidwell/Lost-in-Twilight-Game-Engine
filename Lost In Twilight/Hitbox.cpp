@@ -13,6 +13,8 @@ Hitbox::Hitbox()
 	chanX = 0;
 	chanY = 0;
 	active = true;
+	isInverse = false;
+	Update();
 }
 
 Hitbox::Hitbox(Hitbox& hit, Sprite* hitSprite)
@@ -27,6 +29,8 @@ Hitbox::Hitbox(Hitbox& hit, Sprite* hitSprite)
 	x = hit.x;
 	y = hit.y;
 	active = true;
+	isInverse = hit.isInverse;
+	Update();
 }
 
 Hitbox::Hitbox(int width, int height, Sprite* hitSprite, double changeX, double changeY)
@@ -39,6 +43,8 @@ Hitbox::Hitbox(int width, int height, Sprite* hitSprite, double changeX, double 
 	sprite = hitSprite;
 	type = sprite->type;
 	active = true;
+	isInverse = false;
+	Update();
 }
 
 void Hitbox::setHitbox(int width, int height, Sprite* hitSprite, double changeX, double changeY)
@@ -50,6 +56,8 @@ void Hitbox::setHitbox(int width, int height, Sprite* hitSprite, double changeX,
 	chanY = changeY;
 	sprite = hitSprite;
 	active = true;
+	isInverse = false;
+	Update();
 }
 
 void Hitbox::LinkTo(Sprite* hitSprite, double changeX, double changeY)
@@ -57,31 +65,17 @@ void Hitbox::LinkTo(Sprite* hitSprite, double changeX, double changeY)
 	chanX = changeX;
 	chanY = changeY;
 	sprite = hitSprite;
+	Update();
 }
 
 bool Hitbox::IsOn(Hitbox* hit2)
 {
-	int xpos1 = hit2->x;
-	int ypos1 = hit2->y;
-	int xpos2 = hit2->x + hit2->w;
-	int ypos2 = hit2->y;
-	int xpos3 = hit2->x + hit2->w;
-	int ypos3 = hit2->y + hit2->h;
-	int xpos4 = hit2->x;
-	int ypos4 = hit2->y + hit2->h;
-	if (pointInBox(xpos1, ypos1) || pointInBox(xpos2, ypos2) || pointInBox(xpos3, ypos3) || pointInBox(xpos4, ypos4)) {
+	//compare all points to eachother of each hitbox
+	if (pointInBox(hit2->p[0].first, hit2->p[0].second) || pointInBox(hit2->p[1].first, hit2->p[1].second) || pointInBox(hit2->p[2].first, hit2->p[2].second) || pointInBox(hit2->p[3].first, hit2->p[3].second)) {
 		return true;
 	}
 
-	xpos1 = x;
-	ypos1 = y;
-	xpos2 = x + w;
-	ypos2 = y;
-	xpos3 = x + w;
-	ypos3 = y + h;
-	xpos4 = x;
-	ypos4 = y + h;
-	if (hit2->pointInBox(xpos1, ypos1) || hit2->pointInBox(xpos2, ypos2) || hit2->pointInBox(xpos3, ypos3) || hit2->pointInBox(xpos4, ypos4)) {
+	if (hit2->pointInBox(p[0].first, p[0].second) || hit2->pointInBox(p[1].first, p[1].second) || hit2->pointInBox(p[2].first, p[2].second) || hit2->pointInBox(p[3].first, p[3].second)) {
 		return true;
 	}
 
@@ -95,16 +89,27 @@ bool Hitbox::IsOnExtended(Hitbox* hit2, int ext)
 	hit.h += ext * 2;
 	hit.x -= ext;
 	hit.y -= ext;
+	hit.setPoints();
 
 	return (this->IsOn(&hit));
 }
 
 bool Hitbox::pointInBox(int xpos, int ypos)
 {
+	//point out of box
+	if (isInverse) {
+		if (!((x + w >= xpos && x <= xpos) && (y + h >= ypos && y <= ypos))) {
+			return true;
+		}
+		return false;
+	}
+
 	if ((x + w >= xpos && x <= xpos) && (y + h >= ypos && y <= ypos)) {
 		return true;
 	}
 	return false;
+
+	
 }
 
 double Hitbox::AngleOut(Hitbox* CH)
@@ -146,4 +151,18 @@ void Hitbox::Update()
 
 	x = sprite->x - w/2 + (xr * cos((sprite->a + sprite->angleOffset) * 3.1415 / 180) - yr * sin((sprite->a + sprite->angleOffset) * 3.1415 / 180));
 	y = sprite->y - h/2 + (yr * cos((sprite->a + sprite->angleOffset) * 3.1415 / 180) + xr * sin((sprite->a + sprite->angleOffset) * 3.1415 / 180));
+
+	setPoints();
+}
+
+void Hitbox::setPoints()
+{
+	p[0].first = x;
+	p[0].second = y;
+	p[1].first = x + w;
+	p[1].second = y;
+	p[2].first = x + w;
+	p[2].second = y + h;
+	p[3].first = x;
+	p[3].second = y + h;
 }

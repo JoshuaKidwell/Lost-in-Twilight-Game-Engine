@@ -24,6 +24,7 @@ Bullet::Bullet(std::string spriteName, double xpos, double ypos, const char* img
 	a = 0;
 	angleOffset = 0;
 	s = 0;
+	unused = false;
 
 	bounces = 0;
 	hits = 0;
@@ -42,6 +43,7 @@ Bullet::Bullet(std::string spriteName, Bullet& bullet, double xpos, double ypos,
 	s = bullet.s;
 	angleOffset = bullet.angleOffset;
 	animator = bullet.animator;
+	unused = false;
 
 	bounces = bullet.bounces;
 	hits = bullet.hits;
